@@ -1,0 +1,17 @@
+# Template for building the app from a PR
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Build and Test'
+    inputs:
+      command: 'build'
+      projects: '$(sourceDirectory)/MyApp.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+    
+  - task: DotNetCoreCLI@2
+    displayName: 'Run Tests'
+    inputs:
+      command: 'test'
+      projects: '$(sourceDirectory)/MyApp.Tests.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+

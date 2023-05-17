@@ -1,0 +1,16 @@
+# Template for cleaning the source directory
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Clean Source Directory'
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Clean the source directory
+        Remove-Item -Path $(sourceDirectory) -Recurse -Force
+        
+        # Clone the source code repository
+        git clone https://github.com/example/repo.git $(sourceDirectory)
+        
+        # Additional cleaning steps or custom commands
+

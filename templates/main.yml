@@ -1,0 +1,31 @@
+# Template for the main process
+
+steps:
+  - task: DotNetCoreCLI@2
+    displayName: 'Build and Test'
+    inputs:
+      command: 'build'
+      projects: '$(sourceDirectory)/MyApp.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+    
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish'
+    inputs:
+      command: 'publish'
+      projects: '$(sourceDirectory)/MyApp.csproj'
+      arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+    
+  - task: CopyFiles@2
+    displayName: 'Copy Published Files'
+    inputs:
+      SourceFolder: '$(build.artifactstagingdirectory)'
+      Contents: '**'
+      TargetFolder: '$(build.artifactstagingdirectory)/publish'
+    
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifacts'
+    inputs:
+      PathtoPublish: '$(build.artifactstagingdirectory)/publish'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
+

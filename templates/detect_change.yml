@@ -1,0 +1,19 @@
+# Template for detecting changes
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Detect Changes'
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Detect changes using git diff or other logic
+        # For example:
+        $changes = git diff --name-only HEAD^ HEAD
+        
+        # Check if specific files or directories have changed
+        if ($changes -like '*Models/*') {
+          Write-Host 'Changes detected in the Models directory'
+          # Perform specific actions for model changes
+        }
+        
+        # Additional change detection and handling logic

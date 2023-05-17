@@ -1,0 +1,5 @@
+# Dummy template for app run on the target database
+
+steps:
+  - script: echo "Dummy steps for app run on the target database"
+    # Put your dummy steps or placeholder commands here

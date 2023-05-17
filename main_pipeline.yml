@@ -1,0 +1,133 @@
+# Define your resources repositories
+resources:
+  repositories:
+    - repository: project-name
+      name: Repo-Name/project-name
+      type: git
+      ref: master
+
+# Manually triggered
+trigger: none
+
+# Define env. variables
+variables:
+  - group: "azure-key-vault-secrets"
+  - name: app_version
+    value: "0.19.0"
+    # Configure the app version here
+
+  - name: runmode
+    value: "standard"
+    # Configure the run mode here
+
+  - name: imageName
+    value: "app-runner"
+    # Configure the image name here
+
+  - name: DOCKER_BUILDKIT
+    value: 1
+    # Configure the Docker BuildKit value here
+
+  - name: TAG
+    value: "UAT"
+    # Configure the TAG value here
+
+# Define agent pool
+pool:
+  name: self-hosted-pool
+
+# Reusable job templates
+jobs:
+  - template: templates/clean_source_dir.yml
+    # Use the clean_source_dir.yml template here
+
+  - template: main.yml
+    # Use the main.yml template here
+
+  - template: templates/detect_source_branch.yml
+    # Use the detect_source_branch.yml template here
+
+stages:
+  # Stage 1: UATIntegrationBuild
+  - stage: UATIntegrationBuild
+    displayName: 'Integration Build'
+    jobs:
+      - job: Build
+        displayName: 'Building the app'
+        steps:
+          - template: templates/build_releaseapp_from_pr.yml
+            # Use the build_releaseapp_from_pr.yml template here
+
+          - template: templates/detect_change.yml
+            # Use the detect_change.yml template here
+
+          - template: templates/run_app.yml
+            # Use the run_app.yml template here
+
+  # Stage 2: UATMergeBuildBranch
+  - stage: UATMergeBuildBranch
+    displayName: 'Merge Build Branch'
+    jobs:
+      - deployment: DeployToBranch
+        displayName: 'Deployment to build branch'
+        environment: 'Azure DevOps Build branch'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: templates/merge_build_step.yml
+                  # Use the merge_build_step.yml template here
+
+  # Stage 3: MoveToBlob
+  - stage: MoveToBlob
+    displayName: 'Package and Move to Blob'
+    jobs:
+      - deployment: PackageToBlob
+        displayName: 'Package image'
+        environment: 'Azure App container registry'
+        variables:
+          - template: templates/set_variables.yml
+            # Use the set_variables.yml template here
+
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: templates/save_app_to_blob.yml
+                  # Use the save_app_to_blob.yml template here
+
+  # Stage 4: BuildAppDockerImage
+  - stage: BuildAppDockerImage
+    displayName: 'Build App Docker Image'
+    jobs:
+      - deployment: PackageAppImage
+        displayName: 'Package app image'
+        environment: 'Azure Blob Storage'
+        pool:
+          vmImage: 'ubuntu-16.04'
+        
+        variables:
+          - template: templates/set_variables.yml@devopstemplates
+            # Use the set_variables.yml template here with a different scope
+        
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: templates/package_Apprunner_to_reg.yml@devopstemplates
+                  # Use the package_Apprunner_to_reg.yml template here
+
+  # Stage 5: RunOnUATDatabase
+  - stage: RunOnUATDatabase
+    displayName: 'Run App on Target Database'
+    jobs:
+      - deployment: RunOnUATDB
+        displayName: 'App run on Target database'
+        environment: 'UAT_ENVIRONMENT'
+        
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - template: templates/dummy.yml
+                  # Use the dummy.yml template here

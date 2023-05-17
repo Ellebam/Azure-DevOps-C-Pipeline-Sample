@@ -1,0 +1,5 @@
+# Template for saving the app to blob storage
+
+steps:
+  - script: echo "Saving the app to blob storage"
+    # Put your commands and scripts to save the app to blob storage here

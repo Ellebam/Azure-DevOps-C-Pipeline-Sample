@@ -1,0 +1,11 @@
+# Template for running the app
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Run the App'
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Run the C# application
+        dotnet run --project $(sourceDirectory)/MyApp.csproj
+

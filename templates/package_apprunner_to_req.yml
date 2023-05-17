@@ -1,0 +1,5 @@
+# Template for packaging the app runner to the registry
+
+steps:
+  - script: echo "Packaging the app runner to the registry"
+    # Put your commands and scripts to package the app runner to the registry here

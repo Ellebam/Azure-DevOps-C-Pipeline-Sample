@@ -1,0 +1,14 @@
+# Template for merging the build branch
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Merge Build Branch'
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Merge the build branch into the main branch
+        # For example, assuming "main" is the main branch:
+        git checkout main
+        git merge build-branch
+        git push origin main
+

@@ -1,0 +1,5 @@
+# Template for compiling the app
+
+steps:
+  - script: echo "Compiling the app"
+    # Put your compile commands and scripts here

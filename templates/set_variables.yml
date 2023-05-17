@@ -1,0 +1,12 @@
+# Template for merging the build branch
+
+variables:
+  - name: environment
+    value: "uat"
+    # Configure the environment variable for the target environment (e.g., "uat", "prod", etc.)
+    
+  - name: buildConfiguration
+    value: "release"
+    # Configure the build configuration (e.g., "debug", "release", etc.)
+    
+  # Additional variables specific to the template
