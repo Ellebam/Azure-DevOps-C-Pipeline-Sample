@@ -1,5 +1,23 @@
 # Template for compiling the app
 
 steps:
-  - script: echo "Compiling the app"
-    # Put your compile commands and scripts here
+  - task: UseDotNet@2
+    displayName: 'Install .NET SDK'
+    inputs:
+      version: '5.x'
+      includePreviewVersions: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore Packages'
+    inputs:
+      command: 'restore'
+      projects: '$(sourceDirectory)/MyApp.csproj'
+      feedsToUse: 'select'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build Application'
+    inputs:
+      command: 'build'
+      projects: '$(sourceDirectory)/MyApp.csproj'
+      arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)'
+

@@ -7,11 +7,12 @@ steps:
       command: 'build'
       projects: '$(sourceDirectory)/MyApp.csproj'
       arguments: '--configuration $(buildConfiguration)'
-    
+
   - task: DotNetCoreCLI@2
     displayName: 'Run Tests'
     inputs:
       command: 'test'
       projects: '$(sourceDirectory)/MyApp.Tests.csproj'
       arguments: '--configuration $(buildConfiguration)'
+
 

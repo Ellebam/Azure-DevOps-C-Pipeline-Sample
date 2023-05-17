@@ -1,5 +1,13 @@
 # Template for saving the app to blob storage
 
 steps:
-  - script: echo "Saving the app to blob storage"
-    # Put your commands and scripts to save the app to blob storage here
+  - task: AzureBlobFileCopy@4
+    displayName: 'Upload App to Blob Storage'
+    inputs:
+      SourcePath: '$(build.artifactstagingdirectory)'
+      azureSubscription: 'AzureSubscription'
+      Destination: 'AzureBlob'
+      storage: '$(storageAccountName)'
+      ContainerName: '$(containerName)'
+      BlobPrefix: 'app'
+      AdditionalArgumentsForBlobCopy: '--recursive'

@@ -8,9 +8,10 @@ steps:
       script: |
         # Clean the source directory
         Remove-Item -Path $(sourceDirectory) -Recurse -Force
-        
+
         # Clone the source code repository
         git clone https://github.com/example/repo.git $(sourceDirectory)
-        
+
         # Additional cleaning steps or custom commands
+
 

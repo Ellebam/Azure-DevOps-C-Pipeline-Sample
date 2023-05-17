@@ -1,12 +1,25 @@
 # Template for merging the build branch
 
 variables:
-  - name: environment
-    value: "uat"
-    # Configure the environment variable for the target environment (e.g., "uat", "prod", etc.)
-    
+  - name: sourceDirectory
+    value: '$(Build.SourcesDirectory)'
+    # Specify the source directory where the code repository will be cloned
+
   - name: buildConfiguration
-    value: "release"
-    # Configure the build configuration (e.g., "debug", "release", etc.)
-    
-  # Additional variables specific to the template
+    value: 'release'
+    # Specify the build configuration (e.g., 'debug', 'release')
+
+  - name: storageAccountName
+    value: '<storage_account_name>'
+    # Specify the name of your Azure Storage account
+
+  - name: containerName
+    value: '<container_name>'
+    # Specify the name of the Azure Blob Storage container
+
+  - name: registryName
+    value: '<registry_name>'
+    # Specify the name of your Azure Container Registry
+
+  # Additional variables specific to your project
+

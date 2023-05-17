@@ -9,5 +9,6 @@ steps:
         # Get the current branch name from the repository
         $branchName = git rev-parse --abbrev-ref HEAD
         Write-Host "Source branch detected: $branchName"
-        
+
         # Additional logic to handle different branches or scenarios
+
